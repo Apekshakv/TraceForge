@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TraceForge – Trace every leak. Prove every finding.</title>
+<meta name="description" content="TraceForge traces leaked images to their source, detects images hiding payloads, and keeps tamper-evident evidence. CyberForge idea submission.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="#top"><span class="mark">T</span>TraceForge</a>
+  <nav>
+    <a href="#problem">Problem</a>
+    <a href="#how">How it works</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#try">Try it</a>
+    <a href="#status">Status</a>
+    <a class="btn small repo-link" href="#" target="_blank" rel="noopener">GitHub</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-text">
+      <p class="kicker">CyberForge · AI in Cybersecurity</p>
+      <h1>Trace every leak.<br>Expose every hidden payload.<br><em>Prove every finding.</em></h1>
+      <p class="lede">TraceForge is an AI-powered security tool that traces leaked images to their source, catches images hiding data, and keeps tamper-proof evidence of both.</p>
+      <div class="cta">
+        <a class="btn repo-link" href="#" target="_blank" rel="noopener">View the repository</a>
+        <a class="btn ghost" href="#try">Try the verifier</a>
+      </div>
+    </div>
+    <div class="hero-card" aria-label="Example evidence log">
+      <p class="card-label">Evidence log · example</p>
+      <ul class="chain">
+        <li><span class="dot ok"></span><div><b>Finding #3</b> · Critical<br><code>9f2c…a41e</code> ← <code>b07d…93c2</code></div></li>
+        <li><span class="dot ok"></span><div><b>Finding #2</b> · Suspicious<br><code>b07d…93c2</code> ← <code>51aa…e0f7</code></div></li>
+        <li><span class="dot ok"></span><div><b>Finding #1</b> · Clean<br><code>51aa…e0f7</code> ← <code>genesis</code></div></li>
+      </ul>
+      <p class="card-note">Each entry includes the previous entry’s hash. Edit one and every later link breaks.</p>
+    </div>
+  </section>
+
+  <section id="problem" class="section">
+    <h2>Leaks are easy to miss, hard to prove</h2>
+    <p class="section-lede">A confidential screenshot shows up on a public forum. Who leaked it? Is the image carrying something else inside? Can you prove your evidence was not touched?</p>
+    <div class="grid three">
+      <article class="card"><span class="num">01</span><h3>Who leaked it?</h3><p>Insiders share screenshots and documents. Tracing a public copy to a recipient is guesswork.</p></article>
+      <article class="card"><span class="num">02</span><h3>Is an image hiding something?</h3><p>Attackers hide commands and stolen data inside normal-looking images (MITRE ATT&amp;CK T1027.003, T1567).</p></article>
+      <article class="card"><span class="num">03</span><h3>Can we prove it?</h3><p>Insurers, auditors and courts need evidence that has not been altered.</p></article>
+    </div>
+    <p class="punch">Today, those are three different tools. <strong>TraceForge is one workflow.</strong></p>
+  </section>
+
+  <section id="how" class="section alt">
+    <h2>How it works</h2>
+    <p class="section-lede">Six steps from a shared file to a verified finding.</p>
+    <ol class="steps">
+      <li><h3>Protect</h3><p>A unique recipient ID is embedded invisibly in every shared copy.</p></li>
+      <li><h3>Collect</h3><p>An OSINT collector scans permitted public sources for files tied to the organisation.</p></li>
+      <li><h3>Analyse</h3><p>Extract the watermark, score images for hidden payloads, scan metadata.</p></li>
+      <li><h3>Explain</h3><p>An LLM writes the report, maps MITRE ATT&amp;CK and assigns a risk level.</p></li>
+      <li><h3>Preserve</h3><p>Hash with SHA-256, sign with Ed25519, append to a hash-chained log.</p></li>
+      <li><h3>Verify</h3><p>The verifier returns match or mismatch for any evidence file.</p></li>
+    </ol>
+    <p class="verdicts">Every finding ends as <span class="v crit">Critical</span> <span class="v susp">Suspicious</span> or <span class="v clean">Clean</span>.</p>
+  </section>
+
+  <section id="architecture" class="section">
+    <h2>Every finding passes through analysis, explanation and a signed evidence log</h2>
+    <p class="section-lede">A leaked copy found by the OSINT Collector is checked three ways in parallel, explained by the LLM, then signed into the evidence log before it reaches the dashboard.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 760 330" role="img" aria-label="TraceForge architecture: Watermark Service and OSINT Collector feed the Analysis Engine with three checks, then the LLM report, evidence log and dashboard.">
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="arrow-fill"/></marker></defs>
+        <g class="box"><rect x="24" y="14" width="240" height="56" rx="8"/><text x="144" y="38" class="name">Watermark Service</text><text x="144" y="57" class="note">Embeds a recipient ID per copy</text></g>
+        <g class="box"><rect x="496" y="14" width="240" height="56" rx="8"/><text x="616" y="38" class="name">OSINT Collector</text><text x="616" y="57" class="note">Scans public sources for assets</text></g>
+        <path d="M264 42H496" class="line dashed" marker-end="url(#arr)"/>
+        <text x="380" y="34" class="note mid">a copy leaks to public sources</text>
+        <path d="M616 70V104" class="line" marker-end="url(#arr)"/>
+        <rect x="24" y="104" width="712" height="104" rx="8" class="engine"/>
+        <text x="40" y="126" class="name left">Analysis Engine</text>
+        <g class="box"><rect x="40" y="138" width="216" height="58" rx="8"/><text x="148" y="160" class="name">Watermark extractor</text><text x="148" y="176" class="note">Reads the recipient ID</text><text x="148" y="190" class="note">Answers: who leaked it?</text></g>
+        <g class="box"><rect x="272" y="138" width="216" height="58" rx="8"/><text x="380" y="160" class="name">Steganalysis model</text><text x="380" y="176" class="note">CNN score plus chi-square</text><text x="380" y="190" class="note">Answers: is a payload hidden?</text></g>
+        <g class="box"><rect x="504" y="138" width="216" height="58" rx="8"/><text x="612" y="160" class="name">Metadata and binary scan</text><text x="612" y="176" class="note">exiftool, binwalk, zsteg</text><text x="612" y="190" class="note">Answers: is data appended?</text></g>
+        <path d="M140 208V240" class="line" marker-end="url(#arr)"/>
+        <g class="box"><rect x="24" y="240" width="216" height="62" rx="8"/><text x="132" y="266" class="name">LLM analyst report</text><text x="132" y="286" class="note">Risk level, ATT&amp;CK mapping</text></g>
+        <g class="box main"><rect x="272" y="240" width="216" height="62" rx="8"/><text x="380" y="266" class="name">Evidence log</text><text x="380" y="286" class="note">SHA-256 and Ed25519 signed</text></g>
+        <g class="box"><rect x="520" y="240" width="216" height="62" rx="8"/><text x="628" y="266" class="name">Dashboard and verifier</text><text x="628" y="286" class="note">Findings and tamper check</text></g>
+        <path d="M240 271H272" class="line" marker-end="url(#arr)"/><path d="M488 271H520" class="line" marker-end="url(#arr)"/>
+      </svg>
+    </div>
+  </section>
+
+  <section id="try" class="section alt">
+    <h2>Try the one-pixel test</h2>
+    <p class="section-lede">This runs in your browser with real SHA-256 hashing. Seal the sample image as evidence, verify it, then change a single pixel and verify again.</p>
+    <div class="demo">
+      <div class="canvas-wrap">
+        <canvas id="evidence" width="96" height="96" aria-label="Sample evidence image"></canvas>
+        <p class="caption">Sample “screenshot” · 96×96</p>
+      </div>
+      <div class="demo-controls">
+        <div class="btn-row">
+          <button id="seal" class="btn">1 · Seal as evidence</button>
+          <button id="verify" class="btn" disabled>2 · Verify</button>
+          <button id="flip" class="btn ghost" disabled>3 · Change one pixel</button>
+          <button id="reset" class="btn ghost">Reset</button>
+        </div>
+        <div id="result" class="result idle" role="status" aria-live="polite">Seal the image to start.</div>
+        <div class="hashes">
+          <p><span>Sealed hash</span><code id="h-sealed">–</code></p>
+          <p><span>Current hash</span><code id="h-current">–</code></p>
+        </div>
+        <p class="fineprint">Illustrative demo of the verifier idea. The full system signs each entry with Ed25519 and stores it in a hash-chained log.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="status" class="section">
+    <h2>Status and roadmap</h2>
+    <p class="section-lede">What exists today and what comes next. Update this table as the repository grows.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Hash-based verifier (match / mismatch)</td><td><span class="tag live">Live demo on this page</span></td></tr>
+          <tr><td>Invisible watermark embed and extract</td><td><span class="tag design">Designed</span></td></tr>
+          <tr><td>Hash-chained, signed evidence log</td><td><span class="tag design">Designed</span></td></tr>
+          <tr><td>Findings dashboard (seeded sample data)</td><td><span class="tag design">Designed</span></td></tr>
+          <tr><td>CNN steganalysis with chi-square baseline</td><td><span class="tag next">Next round</span></td></tr>
+          <tr><td>Live OSINT collector</td><td><span class="tag next">Next round</span></td></tr>
+          <tr><td>LLM report and ATT&amp;CK mapping</td><td><span class="tag next">Next round</span></td></tr>
+          <tr><td>SIEM and ticketing integration, role-based access</td><td><span class="tag next">Next round</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <h2>Built for the SOC, the risk team and the insurer</h2>
+    <div class="grid three">
+      <article class="card"><h3>AI-powered SOC</h3><p>Automated triage and an analyst-ready report with ATT&amp;CK mapping for every finding.</p></article>
+      <article class="card"><h3>Risk management</h3><p>Leak attribution and covert-channel detection reduce data-loss exposure.</p></article>
+      <article class="card"><h3>Cyber insurance</h3><p>Verifiable, signed evidence supports claims, audits and disputes.</p></article>
+    </div>
+    <p class="punch small">Defensive by design: watermarking and detection only, never a tool for hiding data.</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div>
+    <strong>TraceForge</strong> · CyberForge idea submission · Team kvapeksha3
+  </div>
+  <a class="btn repo-link" href="#" target="_blank" rel="noopener">View on GitHub</a>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
